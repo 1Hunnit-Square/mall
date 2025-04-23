@@ -1,4 +1,16 @@
-import { DataType } from "../todo/ListComponent";
+type DataType =
+{
+    dtoList: any[],
+    pageNumList: number[],
+    pageRequestDTO: any,
+    prev: boolean,
+    next: boolean,
+    totoalCount: number,
+    prevPage: number,
+    nextPage: number,
+    totalPage: number,
+    current: number
+ }
 
 const PageComponent = ({serverData, movePage} : {serverData: DataType, movePage: (...args : any[])=>void}) => {
 

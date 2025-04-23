@@ -10,9 +10,9 @@ interface TodoType {
 }
 
 const initState = {
-dtoList:[] as TodoType [], pageNumList:[] as number[], pageRequestDTO: null, prev: false, next: false, totoalCount: 0, prevPage: 0, nextPage: 0, totalPage: 0, current: 0 }
+dtoList:[] as TodoType [], pageNumList:[] as number[], pageRequestDTO: null as any, prev: false, next: false, totoalCount: 0, prevPage: 0, nextPage: 0, totalPage: 0, current: 0 }
 
-export type DataType = typeof initState;
+type DataType = typeof initState;
 
 
 const ListComponent = () => {

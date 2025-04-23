@@ -8,11 +8,10 @@ const initState = {	tno:0, title:'', writer: '', dueDate: null as (string | null
 type StateType = typeof initState;
 
 const ModifyComponent = ({ tno } : { tno: string }) => {
-const [todo, setTodo] = useState({...initState});
 
-const [result, setResult] = useState("");
-
-const {moveToList, moveToRead} = useCustomMove();
+    const [todo, setTodo] = useState<StateType>({...initState});
+    const [result, setResult] = useState("");
+    const {moveToList, moveToRead} = useCustomMove();
 
 useEffect(() => {
     getOne(tno).then(data => setTodo(data)) },[tno]);

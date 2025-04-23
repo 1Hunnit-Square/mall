@@ -19,14 +19,14 @@ const page = getNum(queryParams.get('page'),1).toString();
 const size = getNum(queryParams.get('size'),10).toString();
 const queryDefault = createSearchParams({page : page, size: size}).toString(); //새로 추가
 
-const moveToList = (pageParam : {page: string, size: string} | null) => {
+const moveToList = (pageParam : {page: number, size: (number | null)} | null) => {
     
     let queryStr = ""
 
     if(pageParam){
     
-    const pageNum = getNum(pageParam.page, 1);
-    const sizeNum = getNum(pageParam.size, 10);
+    const pageNum = getNum(pageParam.page.toString(), 1);
+    const sizeNum = getNum(pageParam.size == null ? null : pageParam.size.toString(), 10);
     queryStr = createSearchParams({page:pageNum.toString(), size: sizeNum.toString()}).toString();
 
     } else {
