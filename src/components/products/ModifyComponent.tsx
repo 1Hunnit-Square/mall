@@ -4,6 +4,7 @@ import FetchingModal from "../common/FetchingModal";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import useCustomMove from "../../hooks/useCustomMove";
 import ResultModal from "../common/ResultModal";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
 
@@ -27,13 +28,21 @@ const ModifyComponent = ({pno}: {pno : string}) => {
     const [fetching, setFetching] = useState(false)
     const uploadRef = useRef<HTMLInputElement | null>(null);
 
+    const query = useQuery({queryKey : ['products', pno], queryFn:() => getOne(pno), staleTime: Infinity});
+
+    
+
     useEffect(() => { 
-        setFetching(true);
-        getOne(pno).then(data => {
-        setProduct(data);
-        setFetching(false);
-        } )
-        },[pno])
+        if(query.isSuccess) {
+            setProduct(query.data)
+            }
+        
+        } ,[pno, query.data, query.isSuccess])
+
+        const delMutation = useMutation({mutationFn : (pno : string) => deleteOne(pno)})
+        const queryClient = useQueryClient();
+
+       
     
     const handleChangeProduct = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => {
         if(e.target.name == "pname" || e.target.name == "pdesc")
@@ -57,6 +66,7 @@ const ModifyComponent = ({pno}: {pno : string}) => {
         
         }
     
+    const modMutation = useMutation({mutationFn :(product : FormData) => putOne(pno, product)});
     const handleClickModify = () => {
         const files = uploadRef.current?.files;
         const formData = new FormData();
@@ -74,42 +84,42 @@ const ModifyComponent = ({pno}: {pno : string}) => {
             for( let i = 0; i < product.uploadFileNames.length ; i++){ 
                 formData.append("uploadFileNames", product.uploadFileNames[i]);
             }
-            setFetching(true);
-            putOne(pno, formData).then(data => {
-                setResult('Modifed');
-                setFetching(false);
-            })
+            modMutation.mutate(formData)
             }
 
-            const handleClickDelete = () => { 
-                setFetching(true);
-
-                deleteOne(pno).then(data => {
-                setResult("Deleted");
-                setFetching(false);
-                })
-                }
+            const handleClickDelete = () => {
+                delMutation.mutate(pno)
+                } 
                 
 
             const closeModal = () => { 
-                if(result ==='Modified') {
-                moveToRead(pno)	//조회 화면으로 이동
-                } else if (result === 'Deleted'){
-                    moveToList({page:1, size: null});
+                if(delMutation.isSuccess) {
+                    queryClient.invalidateQueries({queryKey : ['products', pno]});
+                    queryClient.invalidateQueries({queryKey : ['products/list']});
+                    moveToList(null);
+                    
                 }
-                setResult("")
-                }
+
+                if(modMutation.isSuccess) {
+                    queryClient.invalidateQueries({queryKey : ['products', pno]})
+                    queryClient.invalidateQueries({queryKey : ['products/list']})
+                    moveToRead(pno)
+                    }
+            }
                 
             
 
     return (
-        <div className = "border-2 border-sky-200 mt-10 m-2 p-4"> Product Modify Component
-        {fetching? <FetchingModal/> :<></>}
-        {result?
+        <div className = "border-2 border-sky-200 mt-10 m-2 p-4">
+        {query.isFetching || delMutation.isPending || modMutation.isPending ? 
+        <FetchingModal/> :
+        <></>
+        }
+        { delMutation.isSuccess || modMutation.isSuccess ?
         <ResultModal
         title={`${result}`}
         content={'정상적으로 처리되었습니다.'}	//결과 모달창
-        callbackFn={closeModal}/>
+        callbackFn={closeModal} />
         :
         <></>
         }
@@ -179,4 +189,3 @@ const ModifyComponent = ({pno}: {pno : string}) => {
     }
     
     export default ModifyComponent;
-    

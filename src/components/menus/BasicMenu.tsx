@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import  useCustomLogin  from "../../hooks/useCustomLogin";
 
 const liCss = "pr-6 text-2xl";
 
 const BasicMenu = () => {
 
-const loginState = useSelector((state : RootState) => state.loginSlice)
+const { loginState } = useCustomLogin();
 
 return (
 <nav id='navbar' className=" flex bg-blue-300">

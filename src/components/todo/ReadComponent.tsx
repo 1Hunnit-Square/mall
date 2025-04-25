@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { getOne } from "../../api/todoApi";
 import useCustomMove from "../../hooks/useCustomMove" ;
 
-const initState = {tno:0, title:'', writer:'', dueDate: null,	complete: false }
+
+const initState = {tno:0, title:'', writer:'', dueDate: null, complete: false }
 
 const ReadComponent = ({tno} : { tno : string}) => {
 
