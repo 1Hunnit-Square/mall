@@ -4,11 +4,13 @@ import { Navigate, useNavigate, createSearchParams } from "react-router-dom"
 import { AxiosError } from "axios";
 import { loginPost } from "../api/memberApi";
 import { removeCookie, setCookie } from "../util/cookieUil";
+import { cartState } from "../atoms/cartState";
 
 const useCustomLogin = ( ) => {
 const navigate = useNavigate();
 const [loginState, setLoginState ] = useRecoilState(signinState);
 const resetState = useResetRecoilState(signinState);
+const resetCartState = useResetRecoilState(cartState);
 const isLogin = loginState.email ? true : false //----------로그인 여부
 
 const doLogin = async (loginParam : {email: string, pw: string}) => { //----------로그인 함수
@@ -26,6 +28,7 @@ const saveAsCookie = (data : any) => {
     const doLogout = () => { //---------------로그아웃 함수
             removeCookie('member') 
             resetState()
+            resetCartState();
             }
             
 

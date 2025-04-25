@@ -7,7 +7,9 @@ const useCustomCart = () => {
 
     const [cartItems,setCartItems] = useRecoilState(cartState);
     const queryClient = useQueryClient();
-    const changeMutation = useMutation({mutationFn : (param : any) => postChangeCart(param), onSuccess: (result) => { setCartItems(result) }});
+    const changeMutation = useMutation({
+      mutationFn : (param : {email : string, pno : string, qty: string, cino?: string}) => postChangeCart(param),
+      onSuccess: (result) => { setCartItems(result)}});
 
 
     const query = useQuery({queryKey: ["cart"], queryFn: getCartItems, staleTime: 1000 * 60 * 60});
@@ -15,13 +17,13 @@ const useCustomCart = () => {
 
     useEffect(() => {
         if(query.isSuccess) {
-        queryClient.invalidateQueries("cart");
+        queryClient.invalidateQueries({queryKey:["cart"]});
         setCartItems(query.data)
         }
         },[query.isSuccess, query.data])
         
 
-  const changeCart = (param : {email : string, pno : string, qty: string}) => {
+  const changeCart = (param : {email : string, pno : string, qty: string, cino?: string}) => {
 
     changeMutation.mutate(param);
 

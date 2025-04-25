@@ -20,12 +20,8 @@ const initState = {
 const host = API_SERVER_HOST;
 
 const ModifyComponent = ({pno}: {pno : string}) => {
-    const [result, setResult] = useState("");
     const {moveToRead, moveToList} = useCustomMove()
-
-
     const [product, setProduct] = useState(initState)
-    const [fetching, setFetching] = useState(false)
     const uploadRef = useRef<HTMLInputElement | null>(null);
 
     const query = useQuery({queryKey : ['products', pno], queryFn:() => getOne(pno), staleTime: Infinity});
@@ -45,14 +41,14 @@ const ModifyComponent = ({pno}: {pno : string}) => {
        
     
     const handleChangeProduct = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => {
-        if(e.target.name == "pname" || e.target.name == "pdesc")
+        if(e.target.name === "pname" || e.target.name === "pdesc")
             product[e.target.name] = e.target.value;
 
-        if(e.target.name == "price")
+        if(e.target.name === "price")
             product[e.target.name] = parseInt(e.target.value);
 
-        if(e.target.name == "delFlag")
-            product[e.target.name] = e.target.value == "true"? true: false;
+        if(e.target.name === "delFlag")
+            product[e.target.name] = e.target.value === "true"? true: false;
 
 
         setProduct({...product});
@@ -117,7 +113,7 @@ const ModifyComponent = ({pno}: {pno : string}) => {
         }
         { delMutation.isSuccess || modMutation.isSuccess ?
         <ResultModal
-        title={`${result}`}
+        title={'처리 완료'}
         content={'정상적으로 처리되었습니다.'}	//결과 모달창
         callbackFn={closeModal} />
         :

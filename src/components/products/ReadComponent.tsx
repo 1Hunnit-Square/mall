@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import	{getOne} from "../../api/productApi";
 import { API_SERVER_HOST } from "../../api/todoApi";
 import useCustomMove from "../../hooks/useCustomMove";

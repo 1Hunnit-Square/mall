@@ -4,9 +4,7 @@ const host = API_SERVER_HOST
 const CartItemComponent = ({cino, pname, price, pno, qty, imageFile, changeCart, email} :
      {cino: number, pname: string, price: number, pno: number, qty: number, imageFile: string[], changeCart: (...args : any[]) => void, email : string}) => {
     const handleClickQty = (amount : number) => {
-        if(qty + amount == 0)
-            return;
-        changeCart({ email, pno : pno.toString(), qty: (qty + amount).toString()});
+        changeCart({ email, cino : cino.toString(), pno : pno.toString(), qty: (qty + amount).toString()});
     }
     return ( 
     <li key={cino} className="border-2">

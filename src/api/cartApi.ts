@@ -7,7 +7,7 @@ const host = `${API_SERVER_HOST}/api/cart`
     return res.data
 }
 
-    export const postChangeCart = async (cartItem : {email : string, pno : string, qty: string}) => {
+    export const postChangeCart = async (cartItem : {email : string, pno : string, qty: string, cino?: string}) => {
     const res = await jwtAxios.post(`${host}/change`, cartItem)
     return res.data
 }
